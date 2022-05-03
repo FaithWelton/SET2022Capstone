@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <link rel="stylesheet" type="text/css" href="../css/Designer.css">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+
+        <title>Designer</title>
+    </head>
+
+    <body>
+        <div class="container.fluid" id="container">
+            <!-- FILE MENUBAR -->
+            <div id="filemenu" class="row">
+                <nav class="navbar fixed-top navbar-expand-sm navbar-light">
+                    <div class="container-fluid">
+                        <!-- TITLE -->
+                        <a href="#" class="navbar-brand">Designer</a>
+
+                        <!-- FILE MENU - New Canvas, Open where left off, Upload file, Export -->
+                        <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                        <div id="navbarCollapse" class="collapse navbar-collapse">
+                            <ul class="nav navbar-nav">
+                                <li class="nav-item dropdown">
+                                    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">File</a>
+                                    <div class="dropdown-menu">
+                                        <a onclick="NewCanvas()" class="dropdown-item">New Canvas</a>
+                                        <a onclick="OpenCanvas()" class="dropdown-item">Open Recent Canvas</a>
+                                        <a onclick="SaveCanvas(this)" class="dropdown-item">Save Canvas</a>
+                                        <a onclick="LoadCanvas(this)" class="dropdown-item">Load Canvas</a>
+                                        <a onclick="ExportCanvas(this)" class="dropdown-item">Export</a>
+
+                                        <div class="dropdown-divider"></div>
+
+                                        <a onclick="UploadFile()" class="dropdown-item">Upload Image</a>
+                                    </div>
+                                </li>
+                                <li class="nav-item">
+                                    <a onclick="HelpfulPopup()" class="nav-link">Help</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </nav>   
+            </div>
+
+            <!-- FILE SELECTOR - Initially Hidden -->
+            <div id="dragable-selector" style="width: max-content; display: none;">
+                <div id="dragable-header">Import</div>
+
+                <div id="dragable-content">
+                    <div id="import_div" class="input-group mb-3">
+                        <input type="file" id="import" class="form-control">
+                        <button onclick="CloseSelector()" class="btn btn-light"><i class="bi bi-x-square"></i></button>
+                    </div>
+                </div>
+            </div>            
+
+            <!-- FILE UPLOADER - Initially Hidden -->
+            <div id="dragable-uploader" class="canvas-class-child" style="width: max-content; display: none;">
+                <div id="dragable-header">Upload Image</div>
+
+                <div id="dragable-content">
+                    <div id="image_upload_div" class="input-group mb-3">
+                        <input id="image_upload" name="image_upload" type="file" class="form-control">
+                        <button onclick="CloseUploader()" class="btn btn-light"><i class="bi bi-x-square"></i></button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Help Menu - Initially Hidden -->
+            <div id="dragable-helper" style="width: max-content; display: none;">
+                <div id="dragable-header">HELP
+                    <button onclick="CloseHelper()" class="btn btn-light"><i class="bi bi-x-square"></i></button>
+                </div>
+                
+                <div id="dragable-content">
+                    <p>Welcome to the Help Menu</p>
+                </div>
+            </div>
+            
+            <br><br><br> <!-- Gets things low enough that Sticky Menu bar isnt covering anything when scrollbar at the top -->
+
+            <div class="row px-4 justify-content-md-center" style="border: 2px solid #415D76;">
+                <div class="col" style="width: 50%;">
+                    <div class="btn-group me-2" role="group" style="width: 100%;">
+                        <button id="btnUndo" onclick="UndoLast()" type="button" class="btn btn-toolbar"><i class="bi bi-arrow-counterclockwise"></i></button>
+                        <button id="btnUndo" onclick="RedoLast()" type="button" class="btn btn-toolbar"><i class="bi bi-arrow-clockwise"></i></button>    
+                        
+                        <button onclick="AddCol()" type="button" class="btn btn-toolbar text-nowrap"> Add Col </button>
+                        <button onclick="AddRow()" type="button" class="btn btn-toolbar text-nowrap"> Add Row </button>
+                        
+                        <button id="alignLeft" onclick="AlignmentOpts(this.id)" type="button" class="btn btn-toolbar"><i class="bi bi-text-left"></i></button>
+                        <button id="alignCenter" onclick="AlignmentOpts(this.id)" type="button" class="btn btn-toolbar"> <i class="bi bi-text-center"></i></button>
+                        <button id="alignRight" onclick="AlignmentOpts(this.id)" type="button" class="btn btn-toolbar"><i class="bi bi-text-right"></i></button>
+                        <button id="alignTop" onclick="AlignmentOpts(this.id)" type="button" class="btn btn-toolbar"><i class="bi bi-align-top"></i></button>
+                        <button id="alignMiddle" onclick="AlignmentOpts(this.id)" type="button" class="btn btn-toolbar"><i class="bi bi-align-middle"></i></button>
+                        <button id="alignBottom" onclick="AlignmentOpts(this.id)" type="button" class="btn btn-toolbar"><i class="bi bi-align-bottom"></i></button>
+                    
+                        <div class="btn-group me-2" role="group">
+                            <button onclick="CreateRange()" type="button" class="btn btn-toolbar text-nowrap"> Add Ratings </button>
+                            <button type="button" class="btn btn-toolbar dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+                                <span class="visually-hidden">Toggle Dropdown</span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <a onclick="ChangeRange()" class="dropdown-item">Change Range</a>
+                                <a onclick="GroupQuestions()" class="dropdown-item">Group with Scale</a>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col" style="width: 50%;">
+                    <div>
+                        <div id="hubBtnGroup" class="btn-group me-2" role="group" style="width: 100%;">
+                            <button id="texts" onclick="DisplayWhichHub(this.id)" class="btn btn-toolbar text-nowrap" type="button">Textboxes</button>
+                            <button id="textblocks" onclick="DisplayWhichHub(this.id)" class="btn btn-toolbar text-nowrap" type="button">Textblocks</button>
+                            <button id="checks" onclick="DisplayWhichHub(this.id)"class="btn btn-toolbar text-nowrap" type="button">Checkboxes</button>
+                            <button id="lines" onclick="DisplayWhichHub(this.id)" class="btn btn-toolbar text-nowrap" type="button">Lines</button>
+                            <button id="boxes" onclick="DisplayWhichHub(this.id)" class="btn btn-toolbar text-nowrap" type="button">Boxes</button>
+                            <button id="customs" onclick="DisplayWhichHub(this.id)" class="btn btn-toolbar text-nowrap" type="button">Customs</button>
+                            <button id="delshape" onclick="DeleteSaved()" type="button" class="btn btn-toolbar text-nowrap" disabled>Delete Shape</button>
+                        </div>
+    
+                        <div id="hubCBorder" style="width: 100%;">
+                            <canvas id="hubC" width="10000" height="80"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <br>
+
+            <div class="row gx-1 px-1">
+                <div class="col">
+                    <div class="canvas-class" id="cBorder" width="1239" height="1603">
+                        <canvas id="c" width="1239" height="1603"></canvas>
+                        <div id="dragable-settings" class="canvas-class-child">
+                            <div id="dragable-header">Settings</div>
+    
+                            <div id="dragable-content">
+                                <div class="row">
+                                    <div id="tokenEdit" class="btn-group me-2" role="group">
+                                        <button onclick="CopyToken(event)" type="button" class="btn btn-light">Copy Token</button>
+                                        <button onclick="PasteToken(event)" type="button" class="btn btn-light">Paste Token</button>
+                                        <button onclick="DeleteToken()" type="button" class="btn btn-light">Delete Token</button>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div id="layers" class="btn-group me-2" role="group">
+                                        <button onclick="BackOne()" type="button" class="btn btn-light">Send Back 1 Layer</button>
+                                        <button onclick="BackAll()" type="button" class="btn btn-light">Send to Back</button>
+                                    
+                                        <button onclick="ForwardOne()" type="button" class="btn btn-light">Send Forward 1 Layer</button>
+                                        <button onclick="ForwardAll()" type="button" class="btn btn-light">Send to Front</button>
+                                    </div>
+                                </div>
+
+                                <div id="canvasSettings" class="row">
+                                    <div class="input-group mb-3">
+                                        <input type="text" class="form-control" value="Edge Snap" readonly>
+                                        <div class="input-group-text">
+                                            <input oninput="EdgeDetectionUpdate(event)" id="edgeDetection" class="form-check-input mt-0" type="number" style="width: 150px; height: 25px;">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div id="canvasSettings" class="row">
+                                    <div class="input-group mb-3">
+                                        <input type="text" class="form-control" value="Object Snap" readonly>
+                                        <div class="input-group-text">
+                                            <input onchange="ObjectSnapUpdate(event)" id="snapObject" class="form-check-input mt-0" type="checkbox" style="width: 50px; height: 25px;">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div id="tokenSettings">
+                                        <!-- ITALIC, BOLD, UNDERLINE -->
+                                        <div id="fontSettings" style="display: none;">
+                                            <div class="btn-group me-2" role="group">
+                                                <button id="fontStyle" onclick="UpdateFontStyle(event)" class="btn btn-light"><i class="bi bi-type-italic"></i></button>
+                                                <button id="fontWeight" onclick="UpdateFontWeight(event)" class="btn btn-light"><i class="bi bi-type-bold"></i></button>
+                                                <button id="underline" onclick="UpdateUnderline(event)" class="btn btn-light"><i class="bi bi-type-underline"></i></button>
+                                            </div>
+                                        </div>
+
+                                        <br>
+
+                                        <!-- FILL COLOUR -->
+                                        <div id="fillSetting" style="display: none;">
+                                            <div class="input-group mb-3">
+                                                <input type="text" class="form-control" value="Text Colour" readonly>
+                                                <div class="input-group-text">
+                                                    <input oninput="UpdateColour(event)" id="fillColour" class="form-check-input" type="color" style="width: 150px; height: 25px;">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- BACKGROUND COLOUR -->
+                                        <div id="bgSetting" style="display: none;">
+                                            <div class="input-group mb-3">
+                                                <input type="text" class="form-control" value="Background Colour" readonly>
+                                                <div class="input-group-text">
+                                                    <input oninput="UpdateBackgroundColour(event)" id="backgroundColour" class="form-check-input" type="color" style="width: 150px; height: 25px;">
+                                                </div>
+                                            </div>    
+                                        </div>
+
+                                        <!-- FONT SIZE -->
+                                        <div id="fontSizeSetting" style="display: none;">
+                                            <div class="input-group mb-3">
+                                                <input type="text" class="form-control" value="Font Size" readonly>
+                                                <div class="input-group-text">
+                                                    <input oninput="UpdateFontSize(event)" id="fontSize" class="form-check-input" type="number" min="1" style="width: 150px; height: 25px;">
+                                                </div>
+                                            </div>    
+                                        </div>
+                                        
+                                        <!-- CHARACTER LIMIT -->
+                                        <div id="inputLimitSetting" style="display: none;">
+                                            <div class="input-group mb-3">
+                                                <input type="text" class="form-control" value="Character Limit" readonly>
+                                                <div class="input-group-text">
+                                                    <input oninput="UpdateInputLimit(event)" id="characterLimit" class="form-check-input" type="number" min="0" style="width: 150px; height: 25px;">
+                                                </div>
+                                            </div>    
+                                        </div>
+                                        
+                                        <!-- QUESTION VALUE -->
+                                        <div id="questionValSetting" style="display: none;">
+                                            <div class="input-group mb-3">
+                                                <input type="text" class="form-control" value="Question Value" readonly>
+                                                <div class="input-group-text">
+                                                    <input onchange="UpdateQuestion(event)" id="questionInput" class="form-check-input" type="text" style="width: 150px; height: 25px;">
+                                                </div>
+                                            </div>    
+                                        </div>
+
+                                        <!-- TEXT SPACING -->
+                                        <div id="textSpaceSetting" style="display: none;">
+                                            <div class="input-group mb-3">
+                                                <input type="text" class="form-control" value="Text Spacing" readonly>
+                                                <div class="input-group-text">
+                                                    <input oninput="UpdateTextSpacing(event)" id="textSpacing" class="form-check-input" type="number" min="10" style="width: 150px; height: 25px;">
+                                                </div>
+                                            </div>    
+                                        </div>
+
+                                        <!-- TEXT BLOCK OUTLINE -->
+                                        <div id="txtOutlineSetting" style="display: none;">
+                                            <div  class="input-group mb-3">
+                                                <input type="text" class="form-control" value="Text Block Outline" readonly>
+                                                <div class="input-group-text">
+                                                    <input oninput="UpdateOutlineBox(event)" id="outlineBox" class="form-check-input" type="checkbox" style="width: 50px; height: 25px;">
+                                                </div>
+                                            </div>    
+                                        </div>
+
+                                        <!-- CHECKBOX SHAPE CHANGE -->
+                                        <div id="checkShapeSetting" style="display: none;">
+                                            <div class="input-group mb-3">
+                                                <button class="btn btn-outline-secondary dropdown-toggle" style="width: 175px;" type="button" data-bs-toggle="dropdown" aria-expanded="false">Checkbox Shape</button>
+                                                <ul class="dropdown-menu">
+                                                  <li><a onclick="SetCheckShape('CheckBoxRect')" class="dropdown-item" href="#">Rectangle</a></li>
+                                                  <li><a onclick="SetCheckShape('CheckBoxCircle')" class="dropdown-item" href="#">Circle</a></li>
+                                                </ul>
+                                                <input id="checkShapeSettingValue" type="text" value="Circle" class="form-control" readonly>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- STROKE WIDTH -->
+                                        <div id="strokeWidSetting" style="display: none;">
+                                            <div class="input-group mb-3">
+                                                <input type="text" class="form-control" value="Stroke Width" readonly>
+                                                <div class="input-group-text">
+                                                    <input oninput="UpdateStrokeWidth(event)" id="strokeWidth" class="form-check-input" type="number" min="1" style="width: 150px; height: 25px;">
+                                                </div>
+                                            </div>    
+                                        </div>
+
+                                        <div id="saveShapeSetting" style="display: none;">
+                                            <button onclick="SaveShape()" type="button" class="btn btn-light">Save Shape</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <br><br>
+
+                                <div class="debugger">
+                                    <label>Debugger Settings</label>
+                                    <div id="debugger-settings">
+                                </div>
+
+                                <br>
+
+                            </div>
+                        </div> 
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+
+    <script src="/js/Designer.js"></script>
+    <script src="/js/ShapeHub.js"></script>
+    <script src="/js/Alignment.js"></script>
+    <script src="/js/Rating.js"></script>
+    <script src="/js/StateModifications.js"></script>
+    <script src="/js/DivMovement.js"></script>
+    <script src="/js/MenuBar.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" ></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.min.js" integrity="sha384-Atwg2Pkwv9vp0ygtn1JAojH0nYbwNJLPhwyoVbhoPwBhjQPR5VtM2+xf0Uwh9KtT" crossorigin="anonymous"></script>
+    
+    <script src="/js/fabric.min.js"> </script>    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</html>

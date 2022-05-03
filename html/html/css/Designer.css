@@ -1,0 +1,87 @@
+
+#container {
+    background-color: #415d767e;
+}
+
+.navbar-light {
+    background-color: #F3F3F4;
+}
+
+.canvas-class {
+    position: relative;
+}
+
+.canvas-class-child{
+    position: absolute;
+    left: 20px;
+    top: 0px;
+    width: 350px;
+    max-width: 350px;
+}
+
+.canvas-container{
+    border: 1px solid #415D76;
+    width: 1239;
+    height: 1603;
+    margin: 0 auto;
+    background-color: #ffffff;
+}
+
+#shapeHub {
+    max-width: 816px;
+}
+
+#hubCBorder {
+    border-left: 1px solid #415D76;
+    border-right: 1px solid #415D76;
+    overflow-x: scroll;
+    overflow-y: hidden;
+}
+
+#dragable-uploader, #dragable-settings, #dragable-selector, #dragable-debugger, #dragable-helper {
+    position: absolute;
+    z-index: 9;
+    background-color: #F3F3F4;
+    border: 1px solid #415D76;
+    text-align: center;
+}
+    #dragable-header {
+        padding: 10px;
+        cursor: move;
+        z-index: 10;
+        background-color: #486884;
+        color: #F3F3F4;
+    }
+    #draggable-content {
+        padding: 10px;
+    }
+
+.btn.btn-toolbar {
+    color: #F3F3F4;
+    background-color: #486884;
+    border-color: #415D76;
+}
+
+#dragable-uploader, #dragable-selector, #dragable-helper {
+    top: 200px;
+    left: 600px;
+}
+
+#dragable-debugger {
+    top: 0px;
+    left: 1700px;
+}
+
+/* Settings Div Buttons */
+.btn.btn-light {
+    color: #F3F3F4;
+    background-color: #486884;
+    border-color: #415D76;
+    font-size: 20px;
+}
+
+.input-group-text, #snap-addon {
+    color: #F3F3F4;
+    background-color: #486884;
+    border-color: #415D76;
+}

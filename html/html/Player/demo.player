@@ -1,0 +1,1 @@
+{"dform":"0.0.0","answers":[{"type":"textbox","values":[{"type":"dragon text 1","answer":"dragons are cool"},{"type":"dragon text 2","answer":"yes they are"},{"type":"dragon text 3","answer":"Woot woott"}]},{"type":"checkbox","values":[{"type":"dragon checkbox 1","answer":true},{"type":"dragon checkbox 2","answer":false},{"type":"dragon checkbox 3","answer":true}]}]}
